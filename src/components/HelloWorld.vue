@@ -34,11 +34,11 @@
 import { Planet } from 'vue-kawaii'
 import axios from 'axios'
 import { v1 as uuidv1 } from 'uuid'
-import moment,{ locale } from 'moment'
+import moment, { locale } from 'moment'
 
-const apiUrl = 'http://localhost:3000/'
-// const apiUrl =
-//   "https://umvu6pfbc5.execute-api.ap-northeast-1.amazonaws.com/dev/";
+// const apiUrl = 'http://localhost:3000/'
+const apiUrl =
+  'https://umvu6pfbc5.execute-api.ap-northeast-1.amazonaws.com/dev/'
 
 export default {
   name: 'HelloWorld',
@@ -52,7 +52,7 @@ export default {
     }
   },
   created() {
-    this.setUuid() 
+    this.setUuid()
     this.setVote()
   },
   methods: {
@@ -60,7 +60,7 @@ export default {
       this.vote = localStorage.getItem(location.pathname) || 0
     },
     async setUuid() {
-      if (!localStorage.getItem('uuid')){
+      if (!localStorage.getItem('uuid')) {
         localStorage.setItem('uuid', uuidv1())
         localStorage.setItem(location.pathname, 0)
       }
@@ -88,7 +88,12 @@ export default {
         .post(
           apiUrl + 'todo',
           {
-            Item: { id: uuid, score: score }
+            Item: {
+              id: uuid,
+              score: score,
+              hostname: location.hostname,
+              pathname: location.pathname
+            }
           },
           { headers: headers }
         )
@@ -105,7 +110,7 @@ export default {
       console.log('Data sent!')
       // Close Loader
       loadingComponent.close()
-      
+
       localStorage.setItem(location.pathname, score)
       this.setVote()
       this.toast()
